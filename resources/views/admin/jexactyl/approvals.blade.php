@@ -61,8 +61,22 @@
             <div class="box box-success">
                 <div class="box-header with-border">
                     <i class="fa fa-list"></i>
-                    <h3 class="box-title">Approval Requests <small>Allow or deny reqursts to create accounts.</small></h3>
+                    <h3 class="box-title">Approval Requests <small>Allow or deny requests to create accounts.</small></h3>
                  </div>
+                <div style="display: flex; align-items: end; justify-content: end">
+                    <form class="text-right" id="approveallform" action="{{ route('admin.jexactyl.approvals.approve', 0) }}" method="POST">
+                        {!! csrf_field() !!}
+                        <button id="approvalApproveAllBtn" class="btn btn-xs btn-default">
+                            Approve all
+                        </button>
+                    </form>
+                    <form class="text-right" id="denyallform" action="{{ route('admin.jexactyl.approvals.deny', 0) }}" method="POST">
+                        {!! csrf_field() !!}
+                        <button id="approvalDenyAllBtn" class="btn btn-xs btn-default">
+                            Deny all
+                        </button>
+                    </form>
+                </div>
                 <div class="box-body table-responsive no-padding">
                     <table class="table table-hover">
                         <tbody>
@@ -146,6 +160,36 @@
             closeOnConfirm: false
         }, function () {
             $('#approveform').submit()
+        });
+    });
+    $('#approvalDenyAllBtn').on('click', function (event) {
+        event.preventDefault();
+
+        swal({
+            type: 'error',
+            title: 'Deny all requests?',
+            text: 'This will remove all users that requested an approval from the panel.',
+            showCancelButton: true,
+            confirmButtonText: 'Deny',
+            confirmButtonColor: 'red',
+            closeOnConfirm: false
+        }, function () {
+            $('#denyallform').submit()
+        });
+    });
+    $('#approvalApproveAllBtn').on('click', function (event) {
+        event.preventDefault();
+
+        swal({
+            type: 'success',
+            title: 'Approve these requests?',
+            text: 'This will grant all users that requested an approval access to the panel immediately.',
+            showCancelButton: true,
+            confirmButtonText: 'Approve',
+            confirmButtonColor: 'green',
+            closeOnConfirm: false
+        }, function () {
+            $('#approveallform').submit()
         });
     });
     </script>

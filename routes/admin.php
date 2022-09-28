@@ -22,7 +22,7 @@ Route::group(['prefix' => '/'], function () {
     Route::get('/discord', [Admin\Jexactyl\RegistrationController::class, 'index'])->name('admin.jexactyl.discord');
     Route::get('/referrals', [Admin\Jexactyl\ReferralsController::class, 'index'])->name('admin.jexactyl.referrals');
     Route::get('/registration', [Admin\Jexactyl\RegistrationController::class, 'index'])->name('admin.jexactyl.registration');
-    
+
     Route::group(['prefix' => '/approvals'], function () {
         Route::get('/', [Admin\Jexactyl\ApprovalsController::class, 'index'])->name('admin.jexactyl.approvals');
 

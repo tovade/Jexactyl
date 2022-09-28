@@ -63,11 +63,19 @@ class ApprovalsController extends Controller
      */
     public function approve(Request $request, int $id): RedirectResponse
     {
-        $user = User::where('id', $id)->first();
-        $user->update(['approved' => true]);
-        // This gives the user access to the frontend.
+        if($id == 0) {
+           $users = User::where('approved', false)->get();
+           foreach ($users as $user) {
+               $user->update(['approved' => true]);
+           }
+            $this->alert->success('All requests have been approved.')->flash();
+        } else {
+            $user = User::where('id', $id)->first();
+            $user->update(['approved' => true]);
+            // This gives the user access to the frontend.
 
-        $this->alert->success($user->username . ' has been approved.')->flash();
+            $this->alert->success($user->username . ' has been approved.')->flash();
+        }
         return redirect()->route('admin.jexactyl.approvals');
     }
 
@@ -76,12 +84,21 @@ class ApprovalsController extends Controller
      */
     public function deny(Request $request, int $id): RedirectResponse
     {
-        $user = User::where('id', $id)->first();
-        $user->delete();
-        // While typically we should look for associated servers, there
-        // shouldn't be any present - as the user has been waiting for approval.
+        if($id == 0) {
+            $users = User::where('approved', false)->get();
+            foreach ($users as $user) {
+                $user->delete();
+            }
+            $this->alert->success('All requests have been denied.')->flash();
+            return redirect()->route('admin.jexactyl.approvals');
+        } else {
+            $user = User::where('id', $id)->first();
+            $user->delete();
+            // While typically we should look for associated servers, there
+            // shouldn't be any present - as the user has been waiting for approval.
 
-        $this->alert->success($user->username . ' has been denied.')->flash();
-        return redirect()->route('admin.jexactyl.approvals');
+            $this->alert->success($user->username . ' has been denied.')->flash();
+            return redirect()->route('admin.jexactyl.approvals');
+        }
     }
 }
